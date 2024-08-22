@@ -13,39 +13,44 @@ jobs:
         python-version: [3.11]
 
     steps:
-      - name: Print a message
-        run: echo "Hello world!"
-
-      - name: Checkout Repo A
+      - name: Checkout client Node repo
         uses: actions/checkout@v3
 
-      - name: Checkout Repo B
+      - name: Checkout helm chart repo
         uses: actions/checkout@v3
         with:
           repository: dataorchestration/helm-ondc-buyer-app-chart
           token: ${{ secrets.PAT_TOKEN }}
-          path: repo-b # This will clone Repo B into a folder named 'repo-b'
+          path: repo-helm-chart # This will clone Repo B into a folder named 'repo-helm-chart'
 
       - name: Fetch all branches
         run: |
-          cd repo-b
+          cd repo-helm-chart
           git fetch --all
 
       - name: Check out or create the test-cicd branch
         run: |
-          cd repo-b
+          cd repo-helm-chart
           git checkout test-cicd || git checkout -b test-cicd
 
-      - name: Make Changes in Repo B
+      - name: Make Changes in repo-helm-chart
         run: |
-          cd repo-b
-          echo "Hello from Repo A!" >> newfile.txt
+          cd repo-helm-chart
+          cat <<EOF > config.yaml
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: node-js-client-version-config
+            namespace: ondc-prod-prod
+          data:
+            image_tag: "public.ecr.aws/l6b3l7s4/ondc-reference-buyer-app:clientsvcv1.2"
+        EOF
 
-      - name: Commit and Push changes to Repo B
+      - name: Commit and Push changes to reoo-helm-chart
         run: |
-          cd repo-b
+          cd repo-helm-chart
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "Update from biap-client-node-js"
+          git commit -m "Update config from biap-client-node-js"
           git push origin test-cicd
