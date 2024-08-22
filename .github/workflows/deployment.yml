@@ -50,7 +50,7 @@ jobs:
             name: node-js-client-version-config
             namespace: ondc-prod-prod
           data:
-            image_tag: "public.ecr.aws/l6b3l7s4/ondc-reference-buyer-app:clientsvcv1.1"
+            image_tag: "public.ecr.aws/l6b3l7s4/ondc-reference-buyer-app:clientsvcv1.2"
           EOF
 
       - name: Commit and Push changes to reoo-helm-chart
