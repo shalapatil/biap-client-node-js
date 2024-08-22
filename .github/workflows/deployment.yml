@@ -69,7 +69,7 @@ jobs:
 
       - name: build image
         # docker build --platform linux/x86_64 -t 568130295144.dkr.ecr.ap-south-1.amazonaws.com/ondc-open-data-web-app:webserverv${version} .
-        run: docker build --platform linux/x86_64 -f app.Dockerfile -t  ${{ env.IMAGE }}${{ steps.commit.outputs.short }} .
+        run: docker build --platform linux/x86_64 -f Dockerfile -t  ${{ env.IMAGE }}${{ steps.commit.outputs.short }} .
 
       - name: push image to ECR
         run: docker push  ${{ env.IMAGE }}${{ steps.commit.outputs.short }}
