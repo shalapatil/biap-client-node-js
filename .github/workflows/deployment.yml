@@ -62,6 +62,9 @@ jobs:
           git commit -m "Update config from biap-client-node-js"
           git push origin test-cicd
 
+      - name: configure kubectl
+        run: aws eks --region ap-south-1 update-kubeconfig --name ondc-prod-prod-eks-cluster
+
       - name: Apply updated config
         run: |
           cd repo-helm-chart
