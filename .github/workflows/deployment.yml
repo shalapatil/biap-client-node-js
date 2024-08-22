@@ -65,4 +65,5 @@ jobs:
       - name: Apply updated config
         run: |
           cd repo-helm-chart
+          cat ${{ env.CONFIG_FILE }}
           kubectl apply -f ${{ env.CONFIG_FILE }}
