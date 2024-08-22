@@ -4,6 +4,13 @@ on:
   push:
     branches: ["master"]
 
+# aws env from secrets
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: ap-south-1
+  CONFIG_FILE: services/config_maps/node-js-client-version-config.yaml
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,15 +42,15 @@ jobs:
 
       - name: Make Changes in repo-helm-chart
         run: |
-          cd repo-helm-chart/services/config_maps
-          cat <<EOF > node-js-client-version-config.yaml
+          cd repo-helm-chart
+          cat <<EOF > ${{ env.CONFIG_FILE }}
           apiVersion: v1
           kind: ConfigMap
           metadata:
             name: node-js-client-version-config
             namespace: ondc-prod-prod
           data:
-            image_tag: "public.ecr.aws/l6b3l7s4/ondc-reference-buyer-app:clientsvcv1.2"
+            image_tag: "public.ecr.aws/l6b3l7s4/ondc-reference-buyer-app:clientsvcv1.1"
           EOF
 
       - name: Commit and Push changes to reoo-helm-chart
@@ -54,3 +61,8 @@ jobs:
           git add .
           git commit -m "Update config from biap-client-node-js"
           git push origin test-cicd
+
+      - name: Apply updated config
+        run: |
+          cd repo-helm-chart
+          kubectl apply -f ${{ env.CONFIG_FILE }}
