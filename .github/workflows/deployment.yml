@@ -36,6 +36,7 @@ jobs:
           cd repo-b
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
+          git fetch --all
           git checkout test-cicd
           git add .
           git commit -m "Update from biap-client-node-js"
