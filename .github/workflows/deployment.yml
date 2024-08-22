@@ -26,7 +26,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           path: repo-b # This will clone Repo B into a folder named 'repo-b'
 
-       - name: Fetch all branches
+      - name: Fetch all branches
         run: |
           cd repo-b
           git fetch --all
