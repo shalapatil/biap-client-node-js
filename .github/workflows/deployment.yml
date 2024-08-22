@@ -26,6 +26,16 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           path: repo-b # This will clone Repo B into a folder named 'repo-b'
 
+       - name: Fetch all branches
+        run: |
+          cd repo-b
+          git fetch --all
+
+      - name: Check out or create the test-cicd branch
+        run: |
+          cd repo-b
+          git checkout test-cicd || git checkout -b test-cicd
+
       - name: Make Changes in Repo B
         run: |
           cd repo-b
@@ -36,8 +46,6 @@ jobs:
           cd repo-b
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git fetch --all
-          git checkout test-cicd
           git add .
           git commit -m "Update from biap-client-node-js"
           git push origin test-cicd
