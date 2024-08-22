@@ -35,8 +35,8 @@ jobs:
 
       - name: Make Changes in repo-helm-chart
         run: |
-          cd repo-helm-chart
-          cat <<EOF > config.yaml
+          cd repo-helm-chart/services/config_maps
+          cat <<EOF > node-js-client-version-config.yaml
           apiVersion: v1
           kind: ConfigMap
           metadata:
