@@ -1,0 +1,42 @@
+name: Test
+
+on:
+  push:
+    branches: ["github-workflows"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.11]
+
+    steps:
+      - name: Print a message
+        run: echo "Hello world!"
+
+      - name: Checkout Repo A
+        uses: actions/checkout@v3
+
+      - name: Checkout Repo B
+        uses: actions/checkout@v3
+        with:
+          repository: dataorchestration/helm-ondc-buyer-app-chart
+          token: ${{ secrets.PAT_TOKEN }}
+          path: repo-b # This will clone Repo B into a folder named 'repo-b'
+
+      - name: Make Changes in Repo B
+        run: |
+          cd repo-b
+          echo "Hello from Repo A!" >> newfile.txt
+
+      - name: Commit and Push changes to Repo B
+        run: |
+          cd repo-b
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git checkout -b test-cicd
+          git add .
+          git commit -m "Update from Repo A"
+          git push origin test-cicd
