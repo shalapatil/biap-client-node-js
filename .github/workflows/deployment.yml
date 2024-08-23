@@ -67,6 +67,9 @@ jobs:
           git commit -m "Update config from biap-client-node-js"
           git push origin test-cicd
 
+      - name: docker login to ECR
+        run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin public.ecr.aws/l6b3l7s4/ondc-reference-buyer-app
+
       - name: build image
         run: docker build --platform linux/x86_64 -f Dockerfile -t  ${{ env.IMAGE }}${{ steps.commit.outputs.short }} .
 
