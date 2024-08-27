@@ -38,7 +38,7 @@ jobs:
       - name: Check if a tag exists for the latest commit
         id: tag_exists
         run: |
-          echo "Current Version is $(env.CURRENT_VERSION)"
+          echo "Current Version is $env.CURRENT_VERSION"
           tag_exists=$(git tag --contains HEAD)
           echo "tag exists: $tag_exists"
           echo "::set-output name=tag_exists::$tag_exists"  
@@ -48,7 +48,7 @@ jobs:
         run: |
           echo "tag exists: $tag_exists"
           current_version=$(cat VERSION)
-          echo "Current version: $current_version"
+          echo "Current version: ${{ current_version}}"
           IFS='.' read -r -a version_parts <<< "$current_version"
           major="${version_parts[0]}"
           minor="${version_parts[1]}"
