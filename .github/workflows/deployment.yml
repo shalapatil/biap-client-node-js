@@ -33,11 +33,12 @@ jobs:
 
       - name: Get current version
         id: get_version
-        run: echo "::set-output name=current_version::$(cat VERSION)"
-
+        run: echo "CURRENT_VERSION=$(cat VERSION)"
+        
       - name: Check if a tag exists for the latest commit
         id: tag_exists
         run: |
+          echo "Current Version is $(CURRENT_VERSION)"
           tag_exists=$(git tag --contains HEAD)
           echo "tag exists: $tag_exists"
           echo "::set-output name=tag_exists::$tag_exists"  
@@ -85,59 +86,59 @@ jobs:
       #   run: |
          
                     
-      - name: Create Git tag       
-        run: |
-          TAG_EXISTS=$(git tag --contains HEAD)
-          if [ -n "$TAG_EXISTS" ]; then
-            echo "Tag already exists for this commit: $TAG_EXISTS"
-          else
-            git config user.name "GitHub Actions"
-            git config user.email "actions@github.com"
-            git add VERSION
-            git commit -m "Update version to ${{ steps.next_version.outputs.next_version }}"  || echo "No changes to commit"
-            git push origin master || echo "No changes to commit"
-            git tag "v${{ steps.next_version.outputs.next_version }}"
-            git push origin "v${{ steps.next_version.outputs.next_version }}"
-          fi
+      # - name: Create Git tag       
+      #   run: |
+      #     TAG_EXISTS=$(git tag --contains HEAD)
+      #     if [ -n "$TAG_EXISTS" ]; then
+      #       echo "Tag already exists for this commit: $TAG_EXISTS"
+      #     else
+      #       git config user.name "GitHub Actions"
+      #       git config user.email "actions@github.com"
+      #       git add VERSION
+      #       git commit -m "Update version to ${{ steps.next_version.outputs.next_version }}"  || echo "No changes to commit"
+      #       git push origin master || echo "No changes to commit"
+      #       git tag "v${{ steps.next_version.outputs.next_version }}"
+      #       git push origin "v${{ steps.next_version.outputs.next_version }}"
+      #     fi
                           
-      - name: Checkout helm chart repo
-        uses: actions/checkout@v3
-        with:
-          repository: dataorchestration/helm-ondc-buyer-app-chart
-          token: ${{ secrets.PAT_TOKEN }}
-          path: repo-helm-chart # This will clone Repo B into a folder named 'repo-helm-chart'
+      # - name: Checkout helm chart repo
+      #   uses: actions/checkout@v3
+      #   with:
+      #     repository: dataorchestration/helm-ondc-buyer-app-chart
+      #     token: ${{ secrets.PAT_TOKEN }}
+      #     path: repo-helm-chart # This will clone Repo B into a folder named 'repo-helm-chart'
 
-      - name: Fetch all branches
-        run: |
-          cd repo-helm-chart
-          git fetch --all
+      # - name: Fetch all branches
+      #   run: |
+      #     cd repo-helm-chart
+      #     git fetch --all
 
-      - name: Check out or create the test-cicd branch
-        run: |
-          cd repo-helm-chart
-          git checkout test-cicd || git checkout -b test-cicd
+      # - name: Check out or create the test-cicd branch
+      #   run: |
+      #     cd repo-helm-chart
+      #     git checkout test-cicd || git checkout -b test-cicd
 
-      - name: Make Changes in repo-helm-chart
-        run: |
-          cd repo-helm-chart
-          cat <<EOF > ${{ env.CONFIG_FILE }}
-          apiVersion: v1
-          kind: ConfigMap
-          metadata:
-            name: node-js-client-version-config
-            namespace: ondc-prod-prod
-          data:
-            image_tag: ${{ env.IMAGE }}${{ steps.next_version.outputs.next_version }}
-          EOF
+      # - name: Make Changes in repo-helm-chart
+      #   run: |
+      #     cd repo-helm-chart
+      #     cat <<EOF > ${{ env.CONFIG_FILE }}
+      #     apiVersion: v1
+      #     kind: ConfigMap
+      #     metadata:
+      #       name: node-js-client-version-config
+      #       namespace: ondc-prod-prod
+      #     data:
+      #       image_tag: ${{ env.IMAGE }}${{ steps.next_version.outputs.next_version }}
+      #     EOF
 
-      - name: Commit and Push changes to repo-helm-chart
-        run: |
-          cd repo-helm-chart
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "Update config from biap-client-node-js" || echo "No changes to commit"
-          git push origin test-cicd || echo "No changes to push"
+      # - name: Commit and Push changes to repo-helm-chart
+      #   run: |
+      #     cd repo-helm-chart
+      #     git config user.name "GitHub Actions"
+      #     git config user.email "actions@github.com"
+      #     git add .
+      #     git commit -m "Update config from biap-client-node-js" || echo "No changes to commit"
+      #     git push origin test-cicd || echo "No changes to push"
 
       # - name: Set up AWS CLI with ecr-pusher profile
       #   run: |
