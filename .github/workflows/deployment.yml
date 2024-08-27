@@ -43,10 +43,20 @@ jobs:
           echo "updated version: $next_version"
           echo "::set-output name=next_version::$next_version"
         
-      - name: get short git commit sha
-        id: commit
-        uses: prompt/actions-commit-hash@v2
-
+      - name: Commit updated version file if tag is different
+        run: |
+          TAG_EXISTS=$(git tag --contains HEAD)
+          if [ -n "$TAG_EXISTS" ]; then
+            echo "Tag already exists for this commit: $TAG_EXISTS"
+          else
+            git config user.name "GitHub Actions"
+            git config user.email "actions@github.com"
+            git add VERSION
+            git commit -m "Update version to ${{ steps.next_version.outputs.next_version }}"
+            git tag "v${{ steps.next_version.outputs.next_version }}"
+            git push origin master --tags
+          fi
+         
       - name: Checkout helm chart repo
         uses: actions/checkout@v3
         with:
