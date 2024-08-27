@@ -53,14 +53,12 @@ jobs:
 
       - name: Print the latest tag
         run: |
-          # Fetch all tags
-          git fetch --tags
-          
-          # Get the latest tag
-          LATEST_TAG=$(git describe --tags --abbrev=0)
-          
-          # Print the latest tag
-          echo "Latest Tag: $LATEST_TAG"
+          # List all tags with their associated commit hashes
+          echo "Tags and their associated commits:"
+          for TAG in $(git tag); do
+            COMMIT_HASH=$(git rev-list -n 1 $TAG)
+            echo "$TAG: $COMMIT_HASH"
+          done
    
 
       - name: Update version file
