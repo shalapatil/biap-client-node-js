@@ -35,9 +35,17 @@ jobs:
         id: get_version
         run: echo "::set-output name=current_version::$(cat VERSION)"
 
+      - name: Check if a tag exists for the latest commit
+        id: tag_exists
+        run: |
+          tag_exists=$(git tag --contains HEAD)
+          echo "tag exists: $tag_exists"
+          echo "::set-output name=tag_exists::$tag_exists"  
+
       - name: Determine next version
         id: next_version
         run: |
+          echo "tag exists: $tag_exists"
           current_version=$(cat VERSION)
           echo "Current version: $current_version"
           IFS='.' read -r -a version_parts <<< "$current_version"
@@ -51,13 +59,13 @@ jobs:
           echo "updated version: $next_version"
           echo "::set-output name=next_version::$next_version"  
 
-      - name: Check if tags exist
-        id: check_tags
-        run: |
-          if [ -z "$(git tag)" ]; then
-            echo "No tags found in the repository."
-            exit 0
-          fi
+      # - name: Check if tags exist
+      #   id: check_tags
+      #   run: |
+      #     if [ -z "$(git tag)" ]; then
+      #       echo "No tags found in the repository."
+      #       exit 0
+      #     fi
 
       - name: Print the latest tag
         run: |
@@ -73,20 +81,21 @@ jobs:
       - name: Update version file
         run: echo "${{ steps.next_version.outputs.next_version }}" > VERSION
         
-      - name: Commit updated version file
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add VERSION
-          git commit -m "Update version to ${{ steps.next_version.outputs.next_version }}"  || echo "No changes to commit"
-          git push origin master || echo "No changes to commit"
+      # - name: Commit updated version file
+      #   run: |
+         
                     
       - name: Create Git tag       
         run: |
           TAG_EXISTS=$(git tag --contains HEAD)
           if [ -n "$TAG_EXISTS" ]; then
             echo "Tag already exists for this commit: $TAG_EXISTS"
-          else           
+          else
+            git config user.name "GitHub Actions"
+            git config user.email "actions@github.com"
+            git add VERSION
+            git commit -m "Update version to ${{ steps.next_version.outputs.next_version }}"  || echo "No changes to commit"
+            git push origin master || echo "No changes to commit"
             git tag "v${{ steps.next_version.outputs.next_version }}"
             git push origin "v${{ steps.next_version.outputs.next_version }}"
           fi
