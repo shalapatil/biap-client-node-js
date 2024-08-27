@@ -41,7 +41,7 @@ jobs:
 
           next_version="$major.$minor.$patch"
           echo "updated version: $next_version"
-          echo "::set-output name=next_version::$next_version"
+          echo "::set-output name=next_version::$next_version"      
         
       - name: Commit updated version file if tag is different
         run: |
@@ -49,6 +49,7 @@ jobs:
           if [ -n "$TAG_EXISTS" ]; then
             echo "Tag already exists for this commit: $TAG_EXISTS"
           else
+            echo "${{ steps.next_version.outputs.next_version }}" > VERSION
             git config user.name "GitHub Actions"
             git config user.email "actions@github.com"
             git add VERSION
