@@ -74,7 +74,7 @@ jobs:
             name: node-js-client-version-config
             namespace: ondc-prod-prod
           data:
-            image_tag: ${{ env.IMAGE }}${{ steps.commit.outputs.short }}
+            image_tag: ${{ env.IMAGE }}${{ steps.next_version.outputs }}
           EOF
 
       - name: Commit and Push changes to reoo-helm-chart
@@ -99,7 +99,7 @@ jobs:
         run: docker build --platform linux/x86_64 -f Dockerfile -t  ${{ env.IMAGE }}${{ steps.commit.outputs.short }} .
 
       - name: push image to ECR
-        run: docker push  ${{ env.IMAGE }}${{ steps.commit.outputs.short }}
+        run: docker push  ${{ env.IMAGE }}${{ steps.next_version.outputs }}
 
 
       # - name: configure kubectl
