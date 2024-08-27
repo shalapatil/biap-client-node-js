@@ -32,6 +32,7 @@ jobs:
         id: next_version
         run: |
           current_version=$(cat VERSION)
+          echo "Current version: $current_version"
           IFS='.' read -r -a version_parts <<< "$current_version"
           major="${version_parts[0]}"
           minor="${version_parts[1]}"
