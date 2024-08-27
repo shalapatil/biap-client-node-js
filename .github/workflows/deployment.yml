@@ -51,16 +51,7 @@ jobs:
             exit 0
           fi
 
-      - name: Print the latest tag
-        run: |
-          # Fetch all tags
-          git fetch --tags
-          
-          # Get the latest tag
-          LATEST_TAG=$(git describe --tags --abbrev=0)
-          
-          # Print the latest tag
-          echo "Latest Tag: $LATEST_TAG"
+   
 
       - name: Update version file
         run: echo "${{ steps.next_version.outputs.next_version }}" > VERSION
