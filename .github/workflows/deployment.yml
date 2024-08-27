@@ -55,6 +55,7 @@ jobs:
         run: |
           # List all tags with their associated commit hashes
           echo "Tags and their associated commits:"
+          git fetch --tags
           for TAG in $(git tag); do
             COMMIT_HASH=$(git rev-list -n 1 $TAG)
             echo "$TAG: $COMMIT_HASH"
