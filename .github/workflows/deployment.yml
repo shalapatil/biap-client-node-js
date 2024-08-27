@@ -88,14 +88,14 @@ jobs:
             image_tag: ${{ env.IMAGE }}${{ steps.next_version.outputs.next_version }}
           EOF
 
-      - name: Commit and Push changes to reoo-helm-chart
+      - name: Commit and Push changes to repo-helm-chart
         run: |
           cd repo-helm-chart
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "Update config from biap-client-node-js"
-          git push origin test-cicd
+          git commit -m "Update config from biap-client-node-js" || echo "No changes to commit"
+          git push origin test-cicd || echo "No changes to push"
 
       - name: Set up AWS CLI with ecr-pusher profile
         run: |
