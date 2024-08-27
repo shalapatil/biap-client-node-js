@@ -45,6 +45,10 @@ jobs:
         
       - name: Commit updated version file if tag is different
         run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          COMMIT_HASH=$(git rev-list -n 1 $LATEST_TAG)
+          echo "Latest Tag: $LATEST_TAG"
+          echo "Commit Hash: $COMMIT_HASH"
           TAG_EXISTS=$(git tag --contains HEAD)
           if [ -n "$TAG_EXISTS" ]; then
             echo "Tag already exists for this commit: $TAG_EXISTS"
