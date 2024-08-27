@@ -41,7 +41,15 @@ jobs:
 
           next_version="$major.$minor.$patch"
           echo "updated version: $next_version"
-          echo "::set-output name=next_version::$next_version"      
+          echo "::set-output name=next_version::$next_version"  
+
+      - name: Check if tags exist
+        id: check_tags
+        run: |
+          if [ -z "$(git tag)" ]; then
+            echo "No tags found in the repository."
+            exit 0
+          fi
         
       - name: Commit updated version file if tag is different
         run: |
