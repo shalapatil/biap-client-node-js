@@ -122,20 +122,20 @@ jobs:
           git commit -m "Update config from biap-client-node-js" || echo "No changes to commit"
           git push origin test-cicd || echo "No changes to push"
 
-      - name: Set up AWS CLI with ecr-pusher profile
-        run: |
-          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ecr-pusher
-          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ecr-pusher
-          aws configure set region ${{ env.AWS_DEFAULT_REGION }} --profile ecr-pusher
+      # - name: Set up AWS CLI with ecr-pusher profile
+      #   run: |
+      #     aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ecr-pusher
+      #     aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ecr-pusher
+      #     aws configure set region ${{ env.AWS_DEFAULT_REGION }} --profile ecr-pusher
 
-      - name: docker login to ECR
-        run: AWS_PROFILE=ecr-pusher aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l6b3l7s4
+      # - name: docker login to ECR
+      #   run: AWS_PROFILE=ecr-pusher aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l6b3l7s4
 
-      - name: build image
-        run: docker build --platform linux/x86_64 -f Dockerfile -t  ${{ env.IMAGE }}${{ steps.next_version.outputs.next_version }} .
+      # - name: build image
+      #   run: docker build --platform linux/x86_64 -f Dockerfile -t  ${{ env.IMAGE }}${{ steps.next_version.outputs.next_version }} .
 
-      - name: push image to ECR
-        run: docker push  ${{ env.IMAGE }}${{ steps.next_version.outputs.next_version }}
+      # - name: push image to ECR
+      #   run: docker push  ${{ env.IMAGE }}${{ steps.next_version.outputs.next_version }}
 
 
       # - name: configure kubectl
