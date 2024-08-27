@@ -61,13 +61,7 @@ jobs:
           git add VERSION
           git commit -m "Update version to ${{ steps.next_version.outputs.next_version }}"  || echo "No changes to commit"
           git push origin master || echo "No changes to commit"
-          
-          LATEST_TAG=$(git describe --tags --abbrev=0)
-          COMMIT_HASH=$(git rev-list -n 1 $LATEST_TAG)
-          echo "Latest Tag: $LATEST_TAG"
-          echo "Commit Hash: $COMMIT_HASH"
-         
-
+                    
       - name: Create Git tag       
         run: |
           TAG_EXISTS=$(git tag --contains HEAD)
