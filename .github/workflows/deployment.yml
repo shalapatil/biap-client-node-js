@@ -51,7 +51,7 @@ jobs:
             exit 0
           fi
 
-       - name: Print the latest tag
+      - name: Print the latest tag
         run: |
           # Fetch all tags
           git fetch --tags
