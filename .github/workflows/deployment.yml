@@ -106,8 +106,8 @@ jobs:
                     
       - name: Create Git tag       
         run: |            
-            git tag "v${{ steps.next_version.outputs.next_version }}" || echo "Tag already exists"
-            git push origin "v${{ steps.next_version.outputs.next_version }}" || echo "Tag already exists"
+            git tag "v$VERSION" || echo "Tag already exists"
+            git push origin "v$VERSION" || echo "Tag already exists"
        
                           
       # - name: Checkout helm chart repo
