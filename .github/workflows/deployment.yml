@@ -57,8 +57,7 @@ jobs:
             major="${version_parts[0]}"
             minor="${version_parts[1]}"
             patch="${version_parts[2]}"
-  
-            # Increment the appropriate part (for example, the patch version)
+            
             patch=$((patch + 1))
   
             next_version="$major.$minor.$patch"
