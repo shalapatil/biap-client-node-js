@@ -35,6 +35,9 @@ jobs:
       - name: Get current version
         id: get_version
         run: echo "CURRENT_VERSION=$(cat VERSION)"
+
+      - name: Fetch all tags
+        run: git fetch --tags
         
       - name: Check if the latest commit is tagged
         id: check_tag
