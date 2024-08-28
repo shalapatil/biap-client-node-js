@@ -50,16 +50,18 @@ jobs:
           echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV           
           if [ "$TAG_EXISTS" == "none" ]; then
             echo "No tag is associated with the latest commit."              
-            echo "Current version: ${{ current_version}}"
+             current_version=$(cat VERSION)
             IFS='.' read -r -a version_parts <<< "$current_version"
             major="${version_parts[0]}"
             minor="${version_parts[1]}"
             patch="${version_parts[2]}"
   
+            # Increment the appropriate part (for example, the patch version)
             patch=$((patch + 1))
   
             next_version="$major.$minor.$patch"
-            echo "updated version: $next_version"
+            echo "Next version: $next_version"
+            echo "::set-output name=next_version::$next_version"
             echo "NEXT_VERSION=$next_version" >> $GITHUB_ENV           
           else
             echo "The latest commit is tagged with: $TAG_EXISTS"
