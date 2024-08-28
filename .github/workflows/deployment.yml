@@ -48,7 +48,7 @@ jobs:
           echo "tag exists: $TAG_NAME"
           current_version=$(cat VERSION)
           echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV           
-          if [ "$TAG_EXISTS" == "none" ]; then
+          if [ "$TAG_NAME" == "none" ]; then
             echo "No tag is associated with the latest commit."              
              current_version=$(cat VERSION)
             IFS='.' read -r -a version_parts <<< "$current_version"
