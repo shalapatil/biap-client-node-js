@@ -113,7 +113,7 @@ jobs:
             name: node-js-client-version-config
             namespace: ondc-prod-prod
           data:
-            image_tag: ${{ env.IMAGE }}${{ VERSION }}
+            image_tag: ${{ env.IMAGE }}$VERSION
           EOF
 
       - name: Commit and Push changes to repo-helm-chart
@@ -138,7 +138,7 @@ jobs:
         run: docker build --platform linux/x86_64 -f Dockerfile -t  ${{ env.IMAGE }}${{ VERSION }} .
 
       - name: push image to ECR
-        run: docker push  ${{ env.IMAGE }}${{ VERSION }}
+        run: docker push  ${{ env.IMAGE }}$VERSION
 
 
       # - name: configure kubectl
