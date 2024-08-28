@@ -1,16 +1,16 @@
 
 name: Deployment
 
-# on:
-#   push:
-#     branches: ["master"]
-
 on:
-  workflow_dispatch:
-    inputs:
-      commit_sha:
-        description: 'Commit SHA to run the workflow for'
-        required: true
+  push:
+    branches: ["master"]
+
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       commit_sha:
+#         description: 'Commit SHA to run the workflow for'
+#         required: true
 
 # aws env from secrets
 env:
