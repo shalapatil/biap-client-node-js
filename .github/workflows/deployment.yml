@@ -63,8 +63,7 @@ jobs:
             patch=$((patch + 1))
   
             next_version="$major.$minor.$patch"
-            echo "Next version: $next_version"
-            echo "::set-output name=next_version::$next_version"
+            echo "Next version: $next_version"          
             echo "VERSION=$next_version" >> $GITHUB_ENV           
           else
             echo "The latest commit is tagged with: $TAG_EXISTS"
