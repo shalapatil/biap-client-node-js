@@ -1,3 +1,4 @@
+
 name: Deployment
 
 # on:
@@ -45,6 +46,24 @@ jobs:
         id: next_version
         run: |
           echo "tag exists: $TAG_NAME"
+          current_version=$(cat VERSION)
+          echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV           
+          if [ "$TAG_EXISTS" == "none" ]; then
+            echo "No tag is associated with the latest commit."              
+            echo "Current version: ${{ current_version}}"
+            IFS='.' read -r -a version_parts <<< "$current_version"
+            major="${version_parts[0]}"
+            minor="${version_parts[1]}"
+            patch="${version_parts[2]}"
+  
+            patch=$((patch + 1))
+  
+            next_version="$major.$minor.$patch"
+            echo "updated version: $next_version"
+            echo "NEXT_VERSION=$next_version" >> $GITHUB_ENV           
+          else
+            echo "The latest commit is tagged with: $TAG_EXISTS"
+          fi
       
 
       # - name: Determine next version
@@ -63,28 +82,13 @@ jobs:
       #     # next_version="$major.$minor.$patch"
       #     # echo "updated version: $next_version"
       #     # echo "::set-output name=next_version::$next_version"  
-
-      # - name: Check if tags exist
-      #   id: check_tags
-      #   run: |
-      #     if [ -z "$(git tag)" ]; then
-      #       echo "No tags found in the repository."
-      #       exit 0
-      #     fi
-
-      - name: Print the latest tag
-        run: |
-          # List all tags with their associated commit hashes
-          echo "Tags and their associated commits:"
-          git fetch --tags
-          for TAG in $(git tag); do
-            COMMIT_HASH=$(git rev-list -n 1 $TAG)
-            echo "$TAG: $COMMIT_HASH"
-          done
-   
+       
 
       - name: Update version file
-        run: echo "${{ steps.next_version.outputs.next_version }}" > VERSION
+        run: |
+          # echo "${{ steps.next_version.outputs.next_version }}" > VERSION
+          echo "Current: $CURRENT_VERSION"
+          echo "Next: $NEXT_VERSION"
         
       # - name: Commit updated version file
       #   run: |
