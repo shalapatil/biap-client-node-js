@@ -35,18 +35,16 @@ jobs:
         id: get_version
         run: echo "CURRENT_VERSION=$(cat VERSION)"
         
-      - name: Check if a tag exists for the latest commit
-        id: tag_exists
+      - name: Check if the latest commit is tagged
+        id: check_tag
         run: |
-          echo "Current Version is $env.CURRENT_VERSION"
-          tag_exists=$(git tag --contains HEAD)
-          echo "tag exists: $tag_exists"
-          echo "::set-output name=tag_exists::$tag_exists"  
+          TAG=$(git describe --tags --exact-match HEAD || echo "none")
+          echo "TAG_NAME=$TAG" >> $GITHUB_ENV
 
       - name: Determine next version
         id: next_version
         run: |
-          echo "tag exists: $tag_exists"
+          echo "tag exists: $TAG_NAME"
           current_version=$(cat VERSION)
           echo "Current version: ${{ current_version}}"
           IFS='.' read -r -a version_parts <<< "$current_version"
