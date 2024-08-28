@@ -45,18 +45,24 @@ jobs:
         id: next_version
         run: |
           echo "tag exists: $TAG_NAME"
-          # current_version=$(cat VERSION)
-          # echo "Current version: ${{ current_version}}"
-          # IFS='.' read -r -a version_parts <<< "$current_version"
-          # major="${version_parts[0]}"
-          # minor="${version_parts[1]}"
-          # patch="${version_parts[2]}"
+      
 
-          # patch=$((patch + 1))
+      # - name: Determine next version
+      #   id: next_version
+      #   run: |
+      #     echo "tag exists: $TAG_NAME"
+      #     # current_version=$(cat VERSION)
+      #     # echo "Current version: ${{ current_version}}"
+      #     # IFS='.' read -r -a version_parts <<< "$current_version"
+      #     # major="${version_parts[0]}"
+      #     # minor="${version_parts[1]}"
+      #     # patch="${version_parts[2]}"
 
-          # next_version="$major.$minor.$patch"
-          # echo "updated version: $next_version"
-          # echo "::set-output name=next_version::$next_version"  
+      #     # patch=$((patch + 1))
+
+      #     # next_version="$major.$minor.$patch"
+      #     # echo "updated version: $next_version"
+      #     # echo "::set-output name=next_version::$next_version"  
 
       # - name: Check if tags exist
       #   id: check_tags
