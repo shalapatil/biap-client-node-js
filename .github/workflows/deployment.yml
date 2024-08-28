@@ -62,9 +62,10 @@ jobs:
             next_version="$major.$minor.$patch"
             echo "Next version: $next_version"
             echo "::set-output name=next_version::$next_version"
-            echo "NEXT_VERSION=$next_version" >> $GITHUB_ENV           
+            echo "VERSION=$next_version" >> $GITHUB_ENV           
           else
             echo "The latest commit is tagged with: $TAG_EXISTS"
+            echo "VERSION=$current_version" >> $GITHUB_ENV 
           fi
       
 
@@ -88,12 +89,16 @@ jobs:
 
       - name: Update version file
         run: |
-          # echo "${{ steps.next_version.outputs.next_version }}" > VERSION
-          echo "Current: $CURRENT_VERSION"
-          echo "Next: $NEXT_VERSION"
+          echo "$VERSION" > VERSION
+          echo "Current: $VERSION"          
         
-      # - name: Commit updated version file
-      #   run: |
+      - name: Commit updated version file
+        run: |
+            git config user.name "GitHub Actions"
+            git config user.email "actions@github.com"
+            git add VERSION
+            git commit -m "Update version to $VERSION"  || echo "No changes to commit"
+            git push origin master || echo "No changes to commit"
          
                     
       # - name: Create Git tag       
