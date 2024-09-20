@@ -156,6 +156,11 @@ jobs:
       - name: Echo clusters
         run:  gcloud container clusters list --region asia-south1
 
+      - name: Configure kubectl
+        run: |
+          gcloud container clusters get-credentials ondc-reference-apps-cluster-v1 --region asia-south1 --project ondc-gemini-pro-ex
+          kubectl config set-context
+
       # - name: configure kubectl
       #   run: aws eks --region ap-south-1 update-kubeconfig --name ondc-prod-prod-eks-cluster
 
