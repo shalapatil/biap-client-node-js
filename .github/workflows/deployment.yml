@@ -150,6 +150,9 @@ jobs:
           GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY }}
         run: echo "${GCLOUD_SERVICE_KEY}" | gcloud auth activate-service-account --key-file=-
 
+      - name: Echo clusters
+        run:  gcloud container clusters list --region asia-south1
+
       # - name: configure kubectl
       #   run: aws eks --region ap-south-1 update-kubeconfig --name ondc-prod-prod-eks-cluster
 
