@@ -29,116 +29,115 @@ jobs:
         python-version: [3.11]
 
     steps:
-      # - name: Checkout client Node repo
-      #   uses: actions/checkout@v3
+      - name: Checkout client Node repo
+        uses: actions/checkout@v3
 
-      # - name: Get current version
-      #   id: get_version
-      #   run: echo "CURRENT_VERSION=$(cat VERSION)"
+      - name: Get current version
+        id: get_version
+        run: echo "CURRENT_VERSION=$(cat VERSION)"
 
-      # - name: Fetch all tags
-      #   run: git fetch --tags
+      - name: Fetch all tags
+        run: git fetch --tags
         
-      # - name: Check if the latest commit is tagged
-      #   id: check_tag
-      #   run: |
-      #     TAG=$(git describe --tags --exact-match HEAD || echo "none")
-      #     echo "TAG_NAME=$TAG" >> $GITHUB_ENV
+      - name: Check if the latest commit is tagged
+        id: check_tag
+        run: |
+          TAG=$(git describe --tags --exact-match HEAD || echo "none")
+          echo "TAG_NAME=$TAG" >> $GITHUB_ENV
 
-      # - name: Determine next version
-      #   id: next_version
-      #   run: |
-      #     current_version=$(cat VERSION)
-      #     echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV           
-      #     if [ "$TAG_NAME" == "none" ]; then
-      #       echo "No tag is associated with the latest commit."              
-      #        current_version=$(cat VERSION)
-      #       IFS='.' read -r -a version_parts <<< "$current_version"
-      #       major="${version_parts[0]}"
-      #       minor="${version_parts[1]}"
-      #       patch="${version_parts[2]}"
+      - name: Determine next version
+        id: next_version
+        run: |
+          current_version=$(cat VERSION)
+          echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV           
+          if [ "$TAG_NAME" == "none" ]; then
+            echo "No tag is associated with the latest commit."              
+             current_version=$(cat VERSION)
+            IFS='.' read -r -a version_parts <<< "$current_version"
+            major="${version_parts[0]}"
+            minor="${version_parts[1]}"
+            patch="${version_parts[2]}"
             
-      #       patch=$((patch + 1))
+            patch=$((patch + 1))
   
-      #       next_version="$major.$minor.$patch"
-      #       echo "Next version: $next_version"          
-      #       echo "VERSION=$next_version" >> $GITHUB_ENV           
-      #     else
-      #       echo "The latest commit is tagged with: $TAG_NAME"
-      #       echo "VERSION=$current_version" >> $GITHUB_ENV 
-      #     fi
+            next_version="$major.$minor.$patch"
+            echo "Next version: $next_version"          
+            echo "VERSION=$next_version" >> $GITHUB_ENV           
+          else
+            echo "The latest commit is tagged with: $TAG_NAME"
+            echo "VERSION=$current_version" >> $GITHUB_ENV 
+          fi
           
-      # - name: Update version file
-      #   run: |
-      #     echo "$VERSION " > VERSION
+      - name: Update version file
+        run: |
+          echo "$VERSION " > VERSION
         
-      # - name: Commit updated version file
-      #   run: |
-      #       git config user.name "GitHub Actions"
-      #       git config user.email "actions@github.com"
-      #       git add VERSION
-      #       git commit -m "Update version to $VERSION"  || echo "No changes to commit"
-      #       git push origin master || echo "No changes to commit"         
+      - name: Commit updated version file
+        run: |
+            git config user.name "GitHub Actions"
+            git config user.email "actions@github.com"
+            git add VERSION
+            git commit -m "Update version to $VERSION"  || echo "No changes to commit"
+            git push origin master || echo "No changes to commit"         
                     
-      # - name: Create Git tag       
-      #   run: |            
-      #       git tag "v$VERSION" || echo "Tag already exists"
-      #       git push origin "v$VERSION" || echo "Tag already exists"
+      - name: Create Git tag       
+        run: |            
+            git tag "v$VERSION" || echo "Tag already exists"
+            git push origin "v$VERSION" || echo "Tag already exists"
 
-      # - name: Checkout helm chart repo
-      #   uses: actions/checkout@v3
-      #   with:
-      #     repository: dataorchestration/helm-ondc-buyer-app-chart
-      #     token: ${{ secrets.PAT_TOKEN }}
-      #     path: repo-helm-chart # This will clone Repo B into a folder named 'repo-helm-chart'
+      - name: Checkout helm chart repo
+        uses: actions/checkout@v3
+        with:
+          repository: dataorchestration/helm-ondc-buyer-app-chart
+          token: ${{ secrets.PAT_TOKEN }}
+          path: repo-helm-chart # This will clone Repo B into a folder named 'repo-helm-chart'
 
-      # - name: Fetch all branches
-      #   run: |
-      #     cd repo-helm-chart
-      #     git fetch --all
+      - name: Fetch all branches
+        run: |
+          cd repo-helm-chart
+          git fetch --all
 
-      # - name: Check out or create the test-cicd branch
-      #   run: |
-      #     cd repo-helm-chart
-      #     git checkout test-cicd || git checkout -b test-cicd
+      - name: Check out or create the test-cicd branch
+        run: |
+          cd repo-helm-chart
+          git checkout test-cicd || git checkout -b test-cicd
 
-      # - name: Make Changes in repo-helm-chart
-      #   run: |
-      #     cd repo-helm-chart
-      #     cat <<EOF > ${{ env.CONFIG_FILE }}
-      #     apiVersion: v1
-      #     kind: ConfigMap
-      #     metadata:
-      #       name: node-js-client-version-config
-      #       namespace: ondc-prod-prod
-      #     data:
-      #       image_tag: ${{ env.IMAGE }}${{ env.VERSION }}
-      #     EOF
+      - name: Make Changes in repo-helm-chart
+        run: |
+          cd repo-helm-chart
+          cat <<EOF > ${{ env.CONFIG_FILE }}
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: node-js-client-version-config
+            namespace: ondc-prod-prod
+          data:
+            image_tag: ${{ env.IMAGE }}${{ env.VERSION }}
+          EOF
 
-      # - name: Commit and Push changes to repo-helm-chart
-      #   run: |
-      #     cd repo-helm-chart
-      #     git config user.name "GitHub Actions"
-      #     git config user.email "actions@github.com"
-      #     git add .
-      #     git commit -m "Update config from biap-client-node-js" || echo "No changes to commit"
-      #     git push origin test-cicd || echo "No changes to push"
+      - name: Commit and Push changes to repo-helm-chart
+        run: |
+          cd repo-helm-chart
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update config from biap-client-node-js" || echo "No changes to commit"
+          git push origin test-cicd || echo "No changes to push"
 
-      # - name: Set up AWS CLI with ecr-pusher profile
-      #   run: |
-      #     aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ecr-pusher
-      #     aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ecr-pusher
-      #     aws configure set region ${{ env.AWS_DEFAULT_REGION }} --profile ecr-pusher
+      - name: Set up AWS CLI with ecr-pusher profile
+        run: |
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ecr-pusher
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ecr-pusher
+          aws configure set region ${{ env.AWS_DEFAULT_REGION }} --profile ecr-pusher
 
-      # - name: docker login to ECR
-      #   run: AWS_PROFILE=ecr-pusher aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l6b3l7s4
+      - name: docker login to ECR
+        run: AWS_PROFILE=ecr-pusher aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l6b3l7s4
 
-      # - name: build image
-      #   run: docker build --platform linux/x86_64 -f Dockerfile -t  ${{ env.IMAGE }}${{ env.VERSION }} .
+      - name: build image
+        run: docker build --platform linux/x86_64 -f Dockerfile -t  ${{ env.IMAGE }}${{ env.VERSION }} .
 
-      # - name: push image to ECR
-      #   run: docker push  ${{ env.IMAGE }}${{ env.VERSION }}
-
+      - name: push image to ECR
+        run: docker push  ${{ env.IMAGE }}${{ env.VERSION }}
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -160,10 +159,7 @@ jobs:
         run: |
           gcloud container clusters get-credentials ondc-reference-apps-cluster-v1 --region asia-south1 --project ondc-gemini-pro-ex
           kubectl config set-context ondc-reference-apps-cluster-v1
-
-      # - name: configure kubectl
-      #   run: aws eks --region ap-south-1 update-kubeconfig --name ondc-prod-prod-eks-cluster
-
+    
       # - name: Apply updated config
       #   run: |
       #     cd repo-helm-chart
