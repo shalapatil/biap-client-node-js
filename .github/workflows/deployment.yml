@@ -70,7 +70,7 @@ jobs:
           
       - name: Update version file
         run: |
-          echo "$VERSION" > VERSION
+          echo "$VERSION " > VERSION
         
       - name: Commit updated version file
         run: |
