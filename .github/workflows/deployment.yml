@@ -151,7 +151,7 @@ jobs:
         run: echo "${GCLOUD_SERVICE_KEY}" | gcloud auth activate-service-account --key-file=-
 
       - name: Set Google Cloud project
-        run: gcloud container clusters get-credentials ondc-reference-apps-cluster-v1 --region asia-south1 --project ondc-gemini-pro-ex
+        run: gcloud config set project ondc-gemini-pro-ex
 
       - name: Echo clusters
         run:  gcloud container clusters list --region asia-south1
