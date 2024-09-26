@@ -160,11 +160,11 @@ jobs:
           gcloud container clusters get-credentials ondc-reference-apps-cluster-v1 --region asia-south1 --project ondc-gemini-pro-ex
           kubectl config set-context ondc-reference-apps-cluster-v1
     
-      # - name: Apply updated config
-      #   run: |
-      #     cd repo-helm-chart
-      #     cat services/config_maps/node-js-client-version-config.yaml
-      #     kubectl apply -f services/config_maps/node-js-client-version-config.yaml
+      - name: Apply updated config
+        run: |
+          cd repo-helm-chart
+          cat services/config_maps/node-js-client-version-config.yaml
+          kubectl apply -f services/config_maps/node-js-client-version-config.yaml
 
       # - name: Install Helm
       #   uses: azure/setup-helm@v3
