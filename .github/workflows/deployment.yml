@@ -156,6 +156,9 @@ jobs:
 
       - name: Set docker for gcloud
         run: gcloud auth configure-docker asia-south1-docker.pkg.dev
+
+      - name: build image
+        run: docker build --platform linux/x86_64 -f Dockerfile -t  'asia-south1-docker.pkg.dev/ondc-ref-buyer-app/ondc-ref-app-node-js-client-service' .
         
       - name: Set Google Cloud project
         run: gcloud config set project ondc-gemini-pro-ex
