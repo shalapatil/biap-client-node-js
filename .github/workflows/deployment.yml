@@ -18,7 +18,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_DEFAULT_REGION: ap-south-1
   CONFIG_FILE: services/config_maps/node-js-client-version-config.yaml
-  IMAGE: public.ecr.aws/l6b3l7s4/ondc-reference-buyer-app:clientsvcv
+  IMAGE: asia-south1-docker.pkg.dev/ondc-ref-buyer-app/ondc-ref-app-node-js-client-service/global/v
 
 jobs:
   build:
@@ -158,7 +158,10 @@ jobs:
         run: gcloud auth configure-docker asia-south1-docker.pkg.dev
 
       - name: build image
-        run: docker build --platform linux/x86_64 -f Dockerfile -t  'asia-south1-docker.pkg.dev/ondc-ref-buyer-app/ondc-ref-app-node-js-client-service' .
+        run: docker build --platform linux/x86_64 -f Dockerfile -t  ${{ env.IMAGE }}${{ env.VERSION }} .
+
+      - name: push image
+        run: docker push  ${{ env.IMAGE }}${{ env.VERSION }}
         
       - name: Set Google Cloud project
         run: gcloud config set project ondc-gemini-pro-ex
