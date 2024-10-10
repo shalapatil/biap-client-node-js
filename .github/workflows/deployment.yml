@@ -18,7 +18,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_DEFAULT_REGION: ap-south-1
   CONFIG_FILE: services/config_maps/node-js-client-version-config.yaml
-  IMAGE: asia-south1-docker.pkg.dev/ondc-ref-buyer-app/ondc-ref-app-node-js-client-service/global/v
+  IMAGE: asia-south1-docker.pkg.dev/ondc-ref-buyer-app/ondc-ref-app-node-js-client-service/global:v
 
 jobs:
   build:
