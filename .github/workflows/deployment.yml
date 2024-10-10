@@ -155,7 +155,7 @@ jobs:
         run: echo "${GCLOUD_SERVICE_KEY}" | gcloud auth activate-service-account --key-file=-
 
       - name: Set Google Cloud project
-        run: gcloud config set project ondc-gemini-pro-ex
+        run: gcloud config set project ondc-ref-buyer-app
 
       - name: Set docker for gcloud
         run: gcloud auth configure-docker asia-south1-docker.pkg.dev
