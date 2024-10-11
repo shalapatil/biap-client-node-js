@@ -11,9 +11,7 @@ jobs:
     with:  # Pass inputs
       service_name: ondc-ref-app-node-js-client-service
       config_file_path: services/config_maps/node-js-client-version-config.yaml
-    secrets:  # Pass secrets
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}       
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
+    secrets:  # Pass secrets         
       PAT_TOKEN: ${{ secrets.PAT_TOKEN }}     
       GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY }}      
 
