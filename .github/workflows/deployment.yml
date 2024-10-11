@@ -6,7 +6,7 @@ on:
     branches: ["master"]
 
 jobs:
-  use-reusable-workflow:
+  use-reusable-workflow:  
     uses: shalapatil/reusable-workflow/.github/workflows/deployment.yml@main  # Reference to the reusable workflow
     with:  # Pass inputs
       service_name: ondc-ref-app-node-js-client-service
